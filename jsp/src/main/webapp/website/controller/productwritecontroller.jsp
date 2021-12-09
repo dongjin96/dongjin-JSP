@@ -11,8 +11,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
-	String folderpath = "C:/Users/505-t/git/web_ezen_1/jsp/src/main/webapp/website/upload";
+<%							
+	String folderpath = "C:/Users/ez201209/git/dongjin-JSP/jsp/src/main/webapp/website/upload";
 	MultipartRequest multipartRequest = new MultipartRequest( 
 			request , folderpath , 1024*1024*100 ,"UTF-8",new DefaultFileRenamePolicy() );
 	
@@ -31,10 +31,10 @@
 	boolean result = ProductDao.getProductDao().productwrite(product);
 	if(result){
 		out.print("<script>alert('제품 등록 되었습니다.');</script>");
-		out.println("<script>location.href='../view../admin/dashboard.jsp';</script>");
+		out.println("<script>location.href='../view/admin/dashboard.jsp';</script>");
 	}else{
 		out.print("<script>alert('제품 등록 실패되었습니다.');</script>");
-		out.println("<script>location.href='../view../admin/productwrite.jsp';</script>");
+		out.println("<script>location.href='../view/admin/productwrite.jsp';</script>");
 	}
 	
 %>

@@ -242,8 +242,38 @@ $(function(){
 	}
 
 /* 회원가입 유효성검사 end */
+/* 제품 상태 변경*/
+	//function 함수
+	function activeupdate(p_num){
+		if(confirm("상태변경하시겠습니까?")==true){
+			
+			
+			
+			$(function(){ 
+				alert(p_num);
+				$.ajax({
+					url:"../../controller/productactivcontroller.jsp",
+					data :{p_num:p_num},
+					success : function(result){
+						
+						if(result==1){
 
+							 //js자료형이없다 
+							// 현재 페이지를 초기화 현재 페이지 refresh
+							location.reload();  // jequrty 메소드
+						}else{
+							alert("변경실패[관리자에게 문의]")
+						}
+					}
+						
+					
+				});
+			});
+			
+		}
+	}
 
+/* 제품 상태 변경끝*/
 
 
 
