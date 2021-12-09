@@ -1,3 +1,4 @@
+<%@page import="dao.ProductDao"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="dto.Product"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
@@ -27,7 +28,14 @@
 			multipartRequest.getParameter("p_img"),
 			multipartRequest.getParameter("p_contents") );
 	// DB 처리 
-	
+	boolean result = ProductDao.getProductDao().productwrite(product);
+	if(result){
+		out.print("<script>alert('제품 등록 되었습니다.');</script>");
+		out.println("<script>location.href='../view../admin/dashboard.jsp';</script>");
+	}else{
+		out.print("<script>alert('제품 등록 실패되었습니다.');</script>");
+		out.println("<script>location.href='../view../admin/productwrite.jsp';</script>");
+	}
 	
 %>
 </body>
