@@ -162,9 +162,9 @@ public class BoardDao {
 				} catch (Exception e) {} return false;
 			}
 		//댓글 조회
-			public ArrayList<Reply> replylist(int b_num){
+			public ArrayList<Reply> replylist(int b_num ){
 				ArrayList<Reply>replys= new ArrayList<Reply>();
-				String sql = "select * from reply where b_num=? order by r_num DESC";
+				String sql = "select * from reply where b_num=? order by r_num DESC ";
 				try {
 					ps = con.prepareStatement(sql);
 					ps.setInt(1, b_num);

@@ -44,7 +44,7 @@
 			int lastrow = BoardDao.getBoardDao().replycount(b_num);
 			int listsize=10; // 페이지당 화면에 표시될게시물수
 			int lastpage=0;			// 마지막페이지
-			if(listsize==0){		//만약에 총게시물 페이지당 게시물 나머지가없으면
+			if(lastrow %listsize==0){		//만약에 총게시물 페이지당 게시물 나머지가없으면
 				lastpage=lastrow/listsize;	// 총게시물 페이지당 게시물
 			}else{
 				lastpage=lastrow/listsize+1;	// 총게시물 페이지당 게시물
