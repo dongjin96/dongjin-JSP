@@ -50,7 +50,7 @@
 						<img class="card-img-top pimg" src="../upload/<%=product.getP_img()%>">
 					</a> 
 					<div class="card-body">
-						<p class="card-text"> <h4><%=product.getP_name()%></h4> </p>
+						<p class="card-text"> <h4><%=product.getP_name()%></h4>
 						<hr>
 						<p class="item">
 							<%=product.getP_contents()%> <br><br>

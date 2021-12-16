@@ -12,8 +12,8 @@
 h1,h2,h3,h4,h5,h6{
 	font-family: 'GongGothicBold';
 }
-body{
-	font-family: 'GongGothicBold';
+*{
+	font-family: '맑은고딕';
 }
 
 .header_logo{
@@ -25,4 +25,30 @@ body{
 	color: #999;
 }
 .carousel-item img{ width: 100%;}
+
+.item .price{
+	font-family: 'GongGothicBold';
+	font-size: 1rem;
+}
+.pimg:hover {
+	transform : scale(1.1);
+}
+
+#total {
+	font-family: 'GongGothicBold';
+	
+}
+
+.pview{
+	font-family: 'GongGothicBold';
+	font-size: 1rem;
+}
+.carttotal{
+	font-family: 'GongGothicBold';
+	font-size: 1rem;
+}
+.totalbox{
+	border:3px solid #eeeeee;
+	margin: 40px; padding : 40px;
+}
 

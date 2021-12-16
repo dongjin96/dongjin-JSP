@@ -19,7 +19,13 @@ public class Product {
 	private String  p_date;
 
 	
-	public String getprice(int price) { // 천다위 쉼표 메소드
+	public String getprice() { // 천다위 쉼표 메소드
+		// 천단위 쉼표
+				DecimalFormat decimalFormat = new DecimalFormat("###,###"); //DecimalFormat : 숫자형식
+				return decimalFormat.format(this.p_price);
+	}
+
+	public String getprice2(int price) { // 천다위 쉼표 메소드
 		// 천단위 쉼표
 				DecimalFormat decimalFormat = new DecimalFormat("###,###"); //DecimalFormat : 숫자형식
 				return decimalFormat.format(this.p_price);

@@ -274,7 +274,244 @@ $(function(){
 	}
 
 /* 제품 상태 변경끝*/
+/*제품 수량 변경 */
 
+function pchange(type,stock,price){// function 함수선정
+	
+	
+	var pcount= document.getElementById("pcount").value*1;
+					// 현재수량 가져오기//문자열-> 숫자열: 문자열*1
+	
+	if(type=='m'){// 마이너스 버튼을 눌렀을떄
+		pcount-=1;	// 현재수량 -1
+		if(pcount<1){ // 만약에 1보다 작아지면
+			alert("수량은 1개 이상만 가능 합니다"); //메시지
+			pcount=1;
+		}
+	}else if(type=='p'){ // 만약에 플러스 버튼을 눌렀으면
+		pcount += 1;	// 현재 수량에 +1
+		if(pcount>stock){	// 만약에 1보다 커지면
+			alert("죄송합니다 재고가 부족합니다")	//메시지
+			pcount=stock;
+		}
+	}else{// 만약에 직접 수량을 변경 입력했을떄
+		if(pcount>stock){ // 만약에 1보다 작아지면
+			alert("죄송합니다재고 부족"); //메시지
+			pcount=stock;
+			
+		}
+		if(pcount<1){
+			alert("수량은 1개 이상만 가능 합니다."); pcount = 1;
+		}
+		
+	}
+	
+	// 현재 수량을 현재수량 입력상자에 대입
+	document.getElementById("pcount").value=pcount;
+	
+									//.value 속성태그[입력상자 input]
+	var totalprice = pcount * price; // 총가격 = 제품수량 * 제품가격 
+	document.getElementById("total").innerHTML = totalprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+									//.innerHTML 속성태그[div]
+									//.총가격.tostring():문자열 변환
+									//.replace(기존문자,새로운 문자);
+									// 정규식 표현식: /\B(?=(\d{3})+(?!\d))/g
+									//(앞=문자존재),(뒤="문자열 3글자")
+									//1./: 시작
+									//2.\b:시작 끝[예 : 1234일경우 1,4]
+									//3.\d{3}: 숫자 길이 문자길이[예 :{3}: 123글자]
+									//4. !\d : 뒤에 숫자 없을경우
+									//5. /g : 전역검색
+
+
+}
+
+/*제품 수량 변경끝 */
+/* 찜하기*/
+function plike(p_num,m_num){
+	alert("dsdsddd");
+	if(m_num==0){alert("로그인후 찜하기 사용 가능합니다");return;}
+		$.ajax({
+			url: "../../controller/productlikecontroller.jsp",
+			data:{p_num : p_num , m_num : m_num},
+			success: function(result){
+				if(result==1){
+					
+					document.getElementById("btnplike").innerHTML="찜하기♡";
+				}else if(result==2){
+					document.getElementById("btnplike").innerHTML="찜하기♥";
+				}
+			alert(result);
+			}
+		});
+	
+	//비동기식 통신에서 
+	
+}
+
+/*찜하기 끝 */
+/* 장바구니 */
+ 	function cartadd(){
+
+	//id 속성을 이용
+	//var p_num2 =$("#p_num").val(); 				alert("id속성:" +p_num2);
+	//2. name 속성 이용
+	//var p_num3=$("input[name=p_num]").val(); 	alert(" name속성:" +p_num3);
+	//3. class속성 이용
+	//var p_num4=$("inout[name=p_num]").val(); 	alert("class속성:" +p_num4);
+	//자바스크립트[js]를 이용한 값 가져오기
+	//1. id속성 이용
+	var p_num=document.getElementById("p_num").value; // alert(" s  id속성:" +p_num);
+	//. class 속성이용 // class 중복 허용 하기 떄문에 배열이용
+	//var p_num5 = document.getElementByIdClassName("p_num")[0].value; alert(" s  class속성:" +p_num);
+	//3. name 속성 이용 // name 속성 중복 허용 하기 떄문에 배열 이용
+	//var p_num6 = document.getElementByName("p_num")[0].value; alert(" s  Name속성:" +p_num);
+	var p_size = document.getElementById("p_size").value;  // alert(" s  id속성:" +p_size);
+		
+		if(p_size == 0){ // 만약에 옵션을 선택 안했으면
+		
+			alert("옵션 선택을 해주세요");return;
+		
+		}
+	var p_count = document.getElementById("pcount").value; //alert(" s  id속성:" +p_count);
+	//컨트롤러 페이지 이동[1.하이퍼링크2.ajax]
+		//location.href="../../controller/productcartcontroller.jsp?p_num="+p_num+"&p_size="+p_size+"&p_count=?";
+		$.ajax({//페이지 전환이 없음[해당페이지와 통신 갔다가 오는게 아님]
+			url:"../../controller/productcartcontroller.jsp",
+			data : {p_num : p_num,p_size:p_size,p_count:p_count},
+			success : function(result){
+				if(confirm("장바구니에 담았습니다[장비구니로 이동할까요?]")==true){
+					location.href="../product/productcart.jsp";
+				}
+			}
+			
+			
+		});
+}
+/*장바구니 끝 */
+/*장바구니 삭제 */
+
+function cartdelete(type , p_num , p_size){
+	//JS<-->jsp 클래스 호환x
+	$.ajax({//페이지 전환이 없음[해당페이지와 통신 갔다가 오는게 아님]
+			url:"../../controller/productcartdeletecontroller.jsp",
+			data : {type:type,p_num:p_num,p_size:p_size,i:-1},
+			success : function(result){
+			location.reload();//현재페이지 새로고침
+				
+				
+			}
+			
+			
+		});
+}
+
+
+
+/*장바구니 삭제끝 */
+/*장바구니 수량 변경 */
+function pchange2( i , type , stock , price ){
+	var p_count = document.getElementById("pcount"+i).value*1;
+	
+	if( type=='m'){		p_count -= 1;	
+		if( p_count<1){	
+			alert("수량은 1개 이상만 가능 합니다."); p_count = 1;
+		}
+	}else if( type =="p" ){	p_count += 1;	
+		if( p_count > stock ){
+			alert("죄송합니다. 재고가 부족합니다.");	p_count = stock;
+		}
+	}else{	
+		if( p_count > stock ){
+			alert("죄송합니다. 재고가 부족합니다.");	p_count = stock;
+		}
+		if( p_count<1){	// 만약에 1보다 작아지면
+			alert("수량은 1개 이상만 가능 합니다."); p_count = 1;
+		}
+	}
+	document.getElementById("pcount"+i).value = p_count; 
+	var totalprice = p_count * price; // 총가격 = 제품수량 * 제품가격 
+	document.getElementById("total"+i).innerHTML = totalprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); 	// . innerHTML 속성 태그 [ div ]
+
+	$.ajax({
+			url :  "../../controller/productcartdeletecontroller.jsp" ,
+			data : { type : type , p_num : -1 , p_size : -1 , i : i,p_count:p_count } ,
+			success : function( result ){
+				location.reload(); 
+			}
+	});
+	
+}
+
+
+
+/*장바구니 수량 변경 end */
+
+/* 결제 API 아임포트 */
+function payment(){
+	 var IMP = window.IMP; // 생략 가능
+	IMP.init("imp62668435"); 
+	 IMP.request_pay({ // param
+	      pg: "html5_inicis",
+	      pay_method: "card",
+	      merchant_uid: "ORD20180131-0000011",
+	      name: "나만의 쇼핑몰",// 결제창 나오는 결제 이름
+	      amount: document.getElementById("totalprice").value, // 결제 금액
+	      buyer_email: "gildong@gmail.com",
+	      buyer_name: "홍길동",
+	      buyer_tel: "010-4242-4242",
+	      buyer_addr: "서울특별시 강남구 신사동",
+	      buyer_postcode: "01181"
+	  }, function (rsp) { // callback
+	      if (rsp.success) {
+	         // 결재 성공했을떄 -> 주문 완료 페이지로 이동
+          } else {
+             // 결재 실패 했을떄
+          }
+      });
+}
+
+/* 결제 API 아임포트 END*/
+
+/*결제창에서 회원가 동일 체크 했을떄 */
+	// 체크 유무 검사[jquery]
+	//$(document).ready(function(){실행문});// 문서내에서 대기상태 이벤트
+	$(document).ready(function(){
+		
+		//체크유무검사
+		$("#checkbox").change(function(){
+			
+			// 체크박스가 변경 이벤트
+			if($("#checkbox").is(":checked")){
+				//체크박스가 is 확인하는거 혹은 선택하는거 체크박스가 체크가 되었는지 확인=TRUE
+					//is : 해당 태크에 속성찾기 유무를 찾아줌 [":속성명"](체크드가있는지 없는지)
+					$("#name").val($("#mname").val());
+					$("#phone").val($("#mphone").val());
+			
+			}else{// 체크 해제시 공백채움
+				$("#name").val("");
+				$("#phone").val("");
+				
+			}
+		});
+	
+	$("#checkbox2").change(function(){
+		
+		if($("#checkbox2").is(":checked")){
+			$("#sample4_postcode").val($("#address1").val());
+			$("#sample4_roadAddress").val($("#address2").val());
+			$("#sample4_jibunAddress").val($("#address3").val());
+			$("#sample4_detailAddress").val($("#address4").val());
+		}else{
+			$("#sample4_postcode").val("");
+			$("#sample4_roadAddress").val("");
+			$("#sample4_jibunAddress").val("");
+			$("#sample4_detailAddress").val("");
+			
+		}
+	});
+});	
+/*결제창에서 회원과 동일 체크 end */
 
 
 

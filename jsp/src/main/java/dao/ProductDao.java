@@ -106,8 +106,65 @@ public class ProductDao extends DB {
 		}return false;
 	}
 	
+	// 6. 제품 개별 출력 
+		public Product getproduct(int p_num) {
+			String sql ="select * from product where p_num="+p_num;
+			try {
+				ps = con.prepareStatement(sql);
+				rs = ps.executeQuery();
+				if( rs.next() ) {
+					Product product = new Product(
+							rs.getInt(1), 
+							rs.getString(2), 
+							rs.getInt(3), 
+							rs.getString(4), 
+							rs.getString(5), 
+							rs.getInt(6), 
+							rs.getString(7), 
+							rs.getInt(8), 
+							rs.getString(9), 
+							rs.getString(10), 
+							rs.getString(11) );
+					return product;
+				}
+			}catch (Exception e) {} return null;
+		}
 	
-	
+	//7. 제품 좋아요 메소드
+		public int plikeupdate(int p_num, int m_num) {
+		    //1.좋아요 버튼-> 좋아요[제품번호, 회원번호]
+		    //2.제품번호와 회원번호가 일치한 좋아요가 없으면 좋아요 생성
+		    // 있으면 좋아요 삭제
+		    String sql =null;
+		    sql="select*from plike where p_num="+p_num+" and m_num="+m_num;
+		    try {
+			ps= con.prepareStatement(sql); rs= ps.executeQuery();
+			if (rs.next()) {
+			    sql="dlete form plike where p_num="+p_num+" and m_num="+m_num;
+			    ps= con.prepareStatement(sql);ps.executeUpdate();
+			    return 1; // 좋아요제거
+			}else {// 좋아요가 기존에 존재하지 않으면
+			    sql="insert into plike(p_num,m_num) values("+p_num+","+m_num+")";
+			    ps= con.prepareStatement(sql);ps.executeUpdate();
+			    	return 2;//좋아요추가
+			}
+		    } catch (Exception e) {System.out.println(e);}return 0;
+		    
+		}
+		//8. 제품좋아요 확인 메소드
+		public boolean plikecheck(int p_num, int m_num) {
+		  
+		    String sql ="select*from plike where p_num="+p_num+" and m_num="+m_num;
+		    try {
+			ps= con.prepareStatement(sql); rs= ps.executeQuery();
+			if (rs.next()) {
+			   
+			    return true;
+			}
+			
+		    } catch (Exception e) {}return false;
+		    
+		}
 
 }
 
