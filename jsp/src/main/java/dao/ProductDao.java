@@ -130,7 +130,7 @@ public class ProductDao extends DB {
 			}catch (Exception e) {} return null;
 		}
 	
-	//7. 제품 좋아요 메소드
+		//7. 제품 좋아요 메소드
 		public int plikeupdate(int p_num, int m_num) {
 		    //1.좋아요 버튼-> 좋아요[제품번호, 회원번호]
 		    //2.제품번호와 회원번호가 일치한 좋아요가 없으면 좋아요 생성
@@ -163,6 +163,22 @@ public class ProductDao extends DB {
 			}
 			
 		    } catch (Exception e) {}return false;
+		    
+		}
+		//9.실시간 재고가 0이면 제품상태를 품절 업데이트 처리
+		public void stockupdate() {
+		    //재고가 0인 제품 찾기
+		    String sql="select*from product where p_stock=0";
+		    try {
+			ps=con.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next()) {
+			    sql="update product set p_active=3 where p_num="+rs.getInt(1);
+			    ps=con.prepareStatement(sql); ps.executeUpdate();
+			}
+		    } catch (Exception e) {
+			// TODO: handle exception
+		    }
 		    
 		}
 

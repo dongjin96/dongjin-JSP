@@ -1,6 +1,9 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
 
 import dto.Cart;
 import dto.Porder;
@@ -41,6 +44,13 @@ try {
 	   ps.setInt(1, order_num); ps.setInt(2, cart.getP_num());
 	   ps.setInt(3, cart.getP_count());ps.setInt(4,1);
 	   ps.executeUpdate();
+	   
+	   //재고 업데이트처리
+	   //3. 재고 업데이트 처리 [주문 주문수량 만큼 제품 재고 차감]
+	   sql="update product set p_stock = p_stock-? where p_num=?";
+	   ps=con.prepareStatement(sql);
+	   ps.setInt(1, cart.getP_count()); ps.setInt(2, cart.getP_num());   
+	   ps.executeUpdate();
 	   }
 	   return true;
 	}
@@ -55,7 +65,7 @@ try {
 
     
  // 상세목록
- 	public ArrayList<Porderdetail> getPorderdetaillist( int order_num ){
+ 	public ArrayList<Porderdetail>	getPorderdetaillist( int order_num ){
  		ArrayList< Porderdetail > porderdetails = new ArrayList<Porderdetail>();
  		
  		String sql = "select * from porderdetail where order_num="+order_num;
@@ -72,4 +82,30 @@ try {
  		}catch (Exception e) {} return null;
  		
  	}
+ //날짜별 주문수
+ 	public JSONObject getorderdatecount(){
+ 	    JSONObject jsonObject = new JSONObject();
+ 	    String sql="select substring_index(order_date,'',1),count(*)"
+ 		    +"from porder group by substring_index(order_date,' ',1)";
+ 	    try {
+		ps = con.prepareStatement(sql);
+		rs = ps.executeQuery(sql);
+		while(rs.next()) {
+		    jsonObject.put( rs.getString(1) , rs.getString(2) );
+		}
+		return jsonObject;
+	    } catch (Exception e) {}return null;
+ 	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
 }

@@ -32,6 +32,7 @@
 	
 	
 		<a href="productwrite.jsp"><button>제품등록</button></a> 
+		<a href="productchart.jsp"><button>제품통계</button></a> 
 	
 		<h3>제품목록</h3>
 		<table class="table">

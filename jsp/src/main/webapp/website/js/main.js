@@ -574,15 +574,108 @@ function payment(){
 
 
 /*결제정보 끝 */
-
+	var item =2; // 기본 주문 2개를 제외한 세번쨰 주문 부터
 	//$(window):현재창
 	$(window).scroll(function(){ 
 /*스크롤 : jquery  $(window).scrollTop() : 현재 스크롤의 위치*/
-	alert("현재 스크롤 위치:"+$(window).scrollTop());
+	
+	alert("현재 스크롤 위치[보이는 화면]:"+$(window).scrollTop());
+	alert("현재 화면의 높이[보이는화면] :"+$(window).height());
+	alert("문서 높이[보이지 않는 화면까지 포함] :"+$(document).height());
+	// 스크롤에 바닥에 닿았을떄 계산
+	if($(window).scrollTOP()==$(document).height()-$(window).height()){
+		//(문서전체)현재스크롤위치==문서전체높이- 현재 문서높이
+		$.ajax({
+			url:"../../controller/orderlistcontroller.jsp",
+			data:{ item : item },
+			sucess:function(result){
+				$("section").append(result);
+			}
+		});
+		item; //스크롤 이벤트가 실행될떄마다 주문 1씩 증가
+	
+		
+	}
+	
 	});
-/*스크롤 /
+/*스크롤 끝/
+	//js 에서 변수 저장하는 방법
+	// 1. var 변수명 =값  : 하나의 값 저장
+	//2. var 배열명 =[]  : 여러개 값 저장
+	// 3. var json={}  : 여러개 엔트리 (키, 값)저장
+	/*json */
+	// var : 변수자료형[js 는 자료형 없다]
+	//배열 형식[]
+ /*var arr =[1,2,3,4]*/
+//json 형식[java map]
+ /*var test = {'id':'qweqwe','password':'qweqwe'}
+		//키: 값-> 한쌍[엔트리]
+	var keys = object.keys(test); // object.key(jason 변수명): 모든 키 호출[]
+		
+	for(var i =0;i<keys.length; i++){ // 키의 개수만큼 반복
+	var key=key[i];
+		alert("키 : "+key+"값:"+test[key]); // 키의 값출력
+		
+	}*/
+	// Json 형식으로 가져오기
+	
+	//$.getJSON('경로/파일명', function(jsons인수명)
+	$.getJSON('../../controller/productchart.jsp', function(jsonObject){	
+		var keyval =[]; // 모든 키를 저장하는 배열
+		var valueval=[]; // 모든 값을 저장하는 배열
+		var  keys= Object.keys(jsonObject);
+		for(var i =0;i<keys.length; i++){ // 키의 개수만큼 반복
+		keyval[i]=keys[i];
+		valueval[i] = jsonObject[keyval[i]];
+		}	
+		
 
 
+/*차트 만들기 */
+	//1. 차트를 표시할 위치 선정
+	var content = document.getElementById("mychart").getContext("2d");
+	//2. 차트 변수 만들기
+	//var 차트이름 = new Chart("차트위치",{차트속성1 : 값1 , 차트속성2 : 값2 , 차트속성3 : 값3})
+	var myChart = new Chart(content,{
+		type: 'pie', // 차트의 형태[bar :막대차트 // line : 선차트 등등]
+		data : {	// 차트의 데이터 [가로축, 세로축, 계열값]  //데이터 start
+			labels : [1,2,3],  // 가로축	
+			datasets:[					//계열 추가[{계열1}],[{계열2}],[{계열3}]
+				{// 하나의 범례	=계열
+				label: '날짜별제품주문수', //계열 이름	
+				data :valueval,	//계열 값
+			
+					backgroundColor: [//계열색상
+			                'rgba(255, 99, 132, 0.2)',
+			                'rgba(54, 162, 235, 0.2)',
+			                'rgba(255, 206, 86, 0.2)',
+			                'rgba(75, 192, 192, 0.2)',
+			                'rgba(153, 102, 255, 0.2)',
+			                'rgba(255, 159, 64, 0.2)'
+			            ],
+			            borderColor: [//계열테두리 색상
+			                'rgba(255, 99, 132, 1)',
+			                'rgba(54, 162, 235, 1)',
+			                'rgba(255, 206, 86, 1)',
+			                'rgba(75, 192, 192, 1)',
+			                'rgba(153, 102, 255, 1)',
+			                'rgba(255, 159, 64, 1)'
+			            ],
+			            borderWidth: 1  //계열 테두리 굵기
+			       }]
+			    },
+			    options: {	//차트 옵션
+			        scales: {
+			            y: { //y 세로축
+			                beginAtZero: true // 기본값 :0부터 시작
+			            }
+			        }
+			    }
+			});
+
+	});
+	/*json end */
+/*차트 만들기 끝 */
 
 
 
