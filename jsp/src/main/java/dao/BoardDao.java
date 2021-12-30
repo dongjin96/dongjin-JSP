@@ -214,7 +214,7 @@ public class BoardDao {
 						sql ="select count(*) from board where b_num = "+ keyword;
 					}else {								 // 제목 혹은 내용 검색 : 포함된 값 검색 
 						sql ="select count(*) from board where "+key+" like '%"+keyword+"%'";
-					}
+	 ;				}
 				}else { // 검색이 없을때				[ 조건 없는 모든 레코드 개수 세기 ]
 					sql="select count(*) from board";
 				}

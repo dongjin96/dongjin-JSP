@@ -1,10 +1,17 @@
 package dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
+
+import com.mysql.cj.protocol.Resultset;
 
 import dto.Product;
 
 public class ProductDao extends DB {
+	
 	
 	public ProductDao() {
 		super();
@@ -181,6 +188,29 @@ public class ProductDao extends DB {
 		    }
 		    
 		}
+		//제품 별 판매량
+		public JSONObject getpcount() {
+		    JSONObject jsonObject = new JSONObject();
+		    String sql = "select p_num,sum(p_count) from porderdetail group by p_num";
+		    try {
+			ps= con.prepareStatement(sql);
+			rs= ps.executeQuery();
+			while(rs.next()) {
+			    
+			  String sql2="select p_name from product where p_num ="+rs.getInt(1);
+			   PreparedStatement ps2 = con.prepareStatement(sql2);
+			    ResultSet rs2 = ps2.executeQuery();
+			    if(rs.next()) {
+				jsonObject.put(rs2.getString(1),rs.getInt(2));
+			    }
+			   
+			}
+			return jsonObject;
+		    } catch (Exception e) {} return null;
+		}
 
+		
+		
+		
 }
 

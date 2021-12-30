@@ -573,13 +573,13 @@ function payment(){
 	}
 
 
-/*결제정보 끝 */
-	var item =2; // 기본 주문 2개를 제외한 세번쨰 주문 부터
+/*/*결제정보 끝 */
+/*	var item =2; // 기본 주문 2개를 제외한 세번쨰 주문 부터
 	//$(window):현재창
 	$(window).scroll(function(){ 
 /*스크롤 : jquery  $(window).scrollTop() : 현재 스크롤의 위치*/
 	
-	alert("현재 스크롤 위치[보이는 화면]:"+$(window).scrollTop());
+	/*alert("현재 스크롤 위치[보이는 화면]:"+$(window).scrollTop());
 	alert("현재 화면의 높이[보이는화면] :"+$(window).height());
 	alert("문서 높이[보이지 않는 화면까지 포함] :"+$(document).height());
 	// 스크롤에 바닥에 닿았을떄 계산
@@ -597,7 +597,7 @@ function payment(){
 		
 	}
 	
-	});
+	});*/
 /*스크롤 끝/
 	//js 에서 변수 저장하는 방법
 	// 1. var 변수명 =값  : 하나의 값 저장
@@ -620,9 +620,9 @@ function payment(){
 	// Json 형식으로 가져오기
 	
 	//$.getJSON('경로/파일명', function(jsons인수명)
-	$.getJSON('../../controller/productchart.jsp', function(jsonObject){	
-		var keyval =[]; // 모든 키를 저장하는 배열
-		var valueval=[]; // 모든 값을 저장하는 배열
+	$.getJSON('../../controller/productchart.jsp?type=1', function(jsonObject){	
+		var keyval =[ ]; // 모든 키를 저장하는 배열
+		var valueval=[ ]; // 모든 값을 저장하는 배열
 		var  keys= Object.keys(jsonObject);
 		for(var i =0;i<keys.length; i++){ // 키의 개수만큼 반복
 		keyval[i]=keys[i];
@@ -633,13 +633,13 @@ function payment(){
 
 /*차트 만들기 */
 	//1. 차트를 표시할 위치 선정
-	var content = document.getElementById("mychart").getContext("2d");
+	var content = document.getElementById("myChart").getContext("2d");
 	//2. 차트 변수 만들기
 	//var 차트이름 = new Chart("차트위치",{차트속성1 : 값1 , 차트속성2 : 값2 , 차트속성3 : 값3})
 	var myChart = new Chart(content,{
 		type: 'pie', // 차트의 형태[bar :막대차트 // line : 선차트 등등]
 		data : {	// 차트의 데이터 [가로축, 세로축, 계열값]  //데이터 start
-			labels : [1,2,3],  // 가로축	
+			labels : keyval,  // 가로축	
 			datasets:[					//계열 추가[{계열1}],[{계열2}],[{계열3}]
 				{// 하나의 범례	=계열
 				label: '날짜별제품주문수', //계열 이름	
@@ -676,11 +676,92 @@ function payment(){
 	});
 	/*json end */
 /*차트 만들기 끝 */
+/*제품 판매량 그래프 */
+	
+	$.getJSON("../../controller/productchart.jsp?type=2" , function(jsonObject){
+		var productname = [ ];	//제품 별 이름 배열
+		var productcount = [ ];	//제품별 판매량 배열
+		var keys2 = Object.keys(jsonObject);
+		for(var i = 0 ; i< keys2.length ; i++){
+			productname[i] =keys2[i];	// json 변수명에 잇는 모든 키를 이름배열 에저장한다
+			productcount[i] = jsonobject[productname[i]];	// json 변수명에 있는 값을 판매량
+		}
+		// 제품별 판매량 그래프 //
+		var context2 = document.getElementById("productchart").getcontext("2d");
+		var myChart2 = new Chart(context2,{
+			type: 'line', //차트의 형태
+			data:{//차트에 들어가는 데이터
+				labels:productname,		//가로축
+				datasets:
+				[
+					{	//계열추가
+						label: '날짜별 주문수',//계열양
+						data:productcount//예열데이터
+					}
+				]
+			}
+		});
+	});
 
 
+/*제품 판매량 그래프 end */
 
 
+	// 목록상자 데이터 변경되면
+	function pchange(){
+		var p_num = $("#pselect").val(); // 해당 아이디의 값 가져오기
+		$.getJSON('../../controller/productchart.jsp?type=3&p_num='+p_num , function(jsonObject){
+			var productdate = [ ];
+			var productcount2 = [ ];
+			var keys3 =  Object.keys(jsonObject);
+			for( var i = 0 ; i < keys3.length ; i++ ){
+				productdate[i] = keys3[i];	// json변수명에 있는 모든 키를 이름배열 저장 
+				productcount2[i] = jsonObject[productdate[i]]; // json변수명에 있는 값을 판매량 배열 저장 
+			}
+			// 제품별 판매량 그래프 //
+			var context3 = document.getElementById("productdatechart").getContext("2d");
+			var myChart3 = new Chart( context3, { 
+				 type: 'line', // 차트의 형태
+		         data: { // 차트에 들어갈 데이터
+			           labels: productdate ,	// 가로축
+			           datasets: 
+							[
+			                    { // 계열추가 
+			                       	label: '제품별 판매추이', // 계열명 
+			                       	data: productcount2 	// 계열 데이터 
+				                  }
+							]
+						}
+			});
+		// 제품별 판매량 그래프 end  // 
+		});
+	}
+	
+	/*kakao 지도 start */
+	 var mapcount= 0;
+	function map(i,lat,lng){
 
+		if(mapcount==0){
+			document.getElementById("map"+i).style.display= "";
+			var mapContainer = document.getElementById('map'+i), // 지도를 표시할 div 
+	    	mapOption = { 
+	        center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+			
+	    };
+		mapcount++;
+		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		}else{
+			document.getElementById("map"+i).style.display= "none";
+			mapcount=0;
+		}
+		
+		}
+	
+	
+	/*카카오 지도 end */
+	
 
 
 

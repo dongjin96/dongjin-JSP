@@ -11,7 +11,7 @@
 	<!-- 부트스트랩css 설정 -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<!-- 본인 css 호출 -->
-	<link rel="stylesheet" href="/jsp/website/css/main.css">
+	<link rel="stylesheet" href="/jsp/website/css/Main.css">
 	
 </head>
 <body>
@@ -22,10 +22,12 @@
 	<!-- 부스트랩 js 설정 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<!-- 다음 주소 api js 호출 -->
+	<!-- 다음 우편 api js 호출 -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<!-- chart API -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	<!-- kakao 지도 api -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0138889e53a5192451c9027ae217b603"></script>
 	<!-- 본인 js 호출 -->
 	<script src="/jsp/website/js/main.js"></script>
 	<%
@@ -84,7 +86,7 @@
 							<li class="nav-item"> <a href="#" class="nav-link">브랜드별</a> </li>
 							<li class="nav-item"> <a href="#" class="nav-link">국산차</a> </li>
 							<li class="nav-item"> <a href="#" class="nav-link">수입차</a> </li>
-							<li class="nav-item"> <a href="#" class="nav-link">이벤트</a> </li>
+							<li class="nav-item"> <a href="/jsp/website/view/member/chating.jsp" class="nav-link">실시간채팅</a> </li>
 							<li class="nav-item"> <a href="#" class="nav-link">구매후기</a> </li>
 							<li class="nav-item"> <a href="/jsp/website/view/board/boardlist.jsp" class="nav-link">고객센터</a> </li>					
 							<li class="nav-item"> <a href="/jsp/website/view/product/productcart.jsp" class="nav-link">장바구니센터</a> </li>	
